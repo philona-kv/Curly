@@ -379,8 +379,3 @@ Toasts (Sonner) report major successes and errors (import, send, save, clear, et
 
 Use FetchPlay when you want a **lightweight, private, no-login** request workspace in the browser. Use Postman (or similar) for **full API lifecycle** features, team collaboration, and full scripting.
 
----
-
-## License
-
-This project is private in its current form; add a `LICENSE` file if you distribute it publicly.
