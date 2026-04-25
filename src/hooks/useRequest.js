@@ -193,6 +193,11 @@ export function compileRequest(request, envLookup, chainContext) {
       headers['Content-Type'] = 'application/json'
     }
     body = resolve(request.body || '')
+  } else if ((request.body || '').trim()) {
+    // GET/HEAD/… with a body (non-standard; Postman allows it — some APIs expect it)
+    const ct = Object.keys(headers).find((k) => k.toLowerCase() === 'content-type')
+    if (!ct) headers['Content-Type'] = 'application/json'
+    body = resolve(request.body || '')
   }
 
   return { url: finalUrl, headers, method, body }

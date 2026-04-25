@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { X, Plus, Play, Save, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { newChainStep } from '../hooks/useChain'
@@ -101,10 +101,29 @@ export default function ChainBuilder({
     }
   }
 
-  const chainContextPreview = {}
-  if (runResults?.chainContext) {
-    Object.assign(chainContextPreview, runResults.chainContext)
-  }
+  const chainContextPreview = useMemo(() => {
+    const ctx = {}
+    if (runResults?.chainContext) {
+      Object.assign(ctx, runResults.chainContext)
+    }
+    // Rebuild from step results so previews work even if only step1 finished
+    if (runResults?.results?.length) {
+      for (const r of runResults.results) {
+        if (!r?.response || r.stepIndex == null) continue
+        const key = `step${r.stepIndex + 1}`
+        const body =
+          r.response.bodyParsed != null
+            ? r.response.bodyParsed
+            : r.response.bodyText
+        ctx[key] = {
+          status: r.response.status,
+          headers: r.response.headers,
+          body,
+        }
+      }
+    }
+    return ctx
+  }, [runResults])
 
   return (
     <div className="fixed inset-0 z-40 flex bg-black/70">
@@ -220,6 +239,22 @@ export default function ChainBuilder({
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
+                  {activeStep > 0 && (
+                    <p className="text-[11px] text-amber-200/90 leading-snug bg-amber-950/30 border border-amber-900/50 rounded px-2 py-1.5">
+                      <span className="font-medium">Chain paths:</span> Use{' '}
+                      <code className="text-amber-100/90">{'{{step1.response.body…}}'}</code>{' '}
+                      where the part after that matches <strong>your JSON shape</strong>. If the
+                      API wraps data in a <code className="text-amber-100/90">body</code> object
+                      (e.g. <code className="text-amber-100/90">resp.body.CaseList</code> in
+                      Postman), reference{' '}
+                      <code className="text-amber-100/90">
+                        {'{{step1.response.body.body.CaseList[0].CaseMainID}}'}
+                      </code>{' '}
+                      — first <code className="text-amber-100/90">body</code> is the response
+                      payload, second is the JSON key. For Smartee, copy requests use{' '}
+                      <strong>POST</strong> with a JSON body (not GET).
+                    </p>
+                  )}
                 </div>
                 <div className="flex-1 min-h-0 overflow-hidden">
                   <RequestBuilder

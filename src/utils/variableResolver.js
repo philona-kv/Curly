@@ -15,13 +15,39 @@ function getByPath(obj, pathParts) {
   let cur = obj
   for (const p of pathParts) {
     if (cur == null) return undefined
-    if (Array.isArray(cur) && /^\d+$/.test(String(p))) {
+    if (Array.isArray(cur) && (typeof p === 'number' || /^\d+$/.test(String(p)))) {
       cur = cur[Number(p)]
       continue
+    }
+    if (Array.isArray(cur) && typeof p === 'string' && p !== '') {
+      return undefined
     }
     cur = cur[p]
   }
   return cur
+}
+
+/**
+ * From "CaseList[0].CaseMainID" or "a.b.0.c" to ["CaseList", 0, "CaseMainID"] / ["a","b",0,"c"].
+ */
+export function parsePathSegments(pathString) {
+  if (pathString == null || pathString === '') return []
+  const out = []
+  for (const raw of String(pathString).split('.')) {
+    const part = raw.trim()
+    if (!part) continue
+    const bracketed = part.match(/^([^[]+)\[(\d+)\]$/)
+    if (bracketed) {
+      out.push(bracketed[1], Number(bracketed[2]))
+      continue
+    }
+    if (/^\d+$/.test(part)) {
+      out.push(Number(part))
+    } else {
+      out.push(part)
+    }
+  }
+  return out
 }
 
 /** Parse chain ref: step1.response.body.user.id */
@@ -44,9 +70,9 @@ export function getChainRefValue(chainContext, inner) {
     return found ? headers[found] : undefined
   }
   if (rest[0] === 'body') {
-    const path = rest.slice(1)
-    if (path.length === 0) return step.body
-    return getByPath(step.body, path)
+    const pathString = rest.slice(1).join('.')
+    if (pathString === '') return step.body
+    return getByPath(step.body, parsePathSegments(pathString))
   }
   return undefined
 }
@@ -176,7 +202,7 @@ export function evaluateStepCondition(prev, condition) {
   }
   const mBody = c.match(/^response\.body\.(.+?)\s*===?\s*(.+)$/)
   if (mBody) {
-    const path = mBody[1].trim().split('.')
+    const path = parsePathSegments(mBody[1].trim())
     let rhs = mBody[2].trim()
     let expected
     if (rhs === 'true') expected = true
