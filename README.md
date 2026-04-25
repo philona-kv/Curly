@@ -6,27 +6,34 @@ This document describes features, architecture, data formats, and how to run or 
 
 ---
 
+## Public deployment
+
+The app is deployed for public use at **[https://fetchplay.netlify.app/](https://fetchplay.netlify.app/)** (Netlify). That URL is a **static SPA**; collections, environments, history, and AI keys still live only in **your browser’s** `localStorage` for that origin—Netlify does not store your API data.
+
+---
+
 ## Table of contents
 
-1. [What FetchPlay is (and is not)](#what-fetchplay-is-and-is-not)
-2. [Tech stack](#tech-stack)
-3. [Feature overview](#feature-overview)
-4. [User interface layout](#user-interface-layout)
-5. [Requests: REST and GraphQL](#requests-rest-and-graphql)
-6. [Authentication](#authentication)
-7. [Environments and variables](#environments-and-variables)
-8. [Collections and import / export](#collections-and-import--export)
-9. [Request history](#request-history)
-10. [Request chains](#request-chains)
-11. [AI assistant](#ai-assistant)
-12. [Persistence (localStorage)](#persistence-localstorage)
-13. [Project structure](#project-structure)
-14. [Getting started (development)](#getting-started-development)
-15. [Building for production](#building-for-production)
-16. [Deployment](#deployment)
-17. [Keyboard shortcuts and UX](#keyboard-shortcuts-and-ux)
-18. [Limitations and browser behavior](#limitations-and-browser-behavior)
-19. [Comparison with Postman (high level)](#comparison-with-postman-high-level)
+1. [Public deployment](#public-deployment)
+2. [What FetchPlay is (and is not)](#what-fetchplay-is-and-is-not)
+3. [Tech stack](#tech-stack)
+4. [Feature overview](#feature-overview)
+5. [User interface layout](#user-interface-layout)
+6. [Requests: REST and GraphQL](#requests-rest-and-graphql)
+7. [Authentication](#authentication)
+8. [Environments and variables](#environments-and-variables)
+9. [Collections and import / export](#collections-and-import--export)
+10. [Request history](#request-history)
+11. [Request chains](#request-chains)
+12. [AI assistant](#ai-assistant)
+13. [Persistence (localStorage)](#persistence-localstorage)
+14. [Project structure](#project-structure)
+15. [Getting started (development)](#getting-started-development)
+16. [Building for production](#building-for-production)
+17. [Deployment](#deployment)
+18. [Keyboard shortcuts and UX](#keyboard-shortcuts-and-ux)
+19. [Limitations and browser behavior](#limitations-and-browser-behavior)
+20. [Comparison with Postman (high level)](#comparison-with-postman-high-level)
 
 ---
 
@@ -329,11 +336,12 @@ Serves the production build locally for a quick smoke test.
 
 ## Deployment
 
+- **Public instance:** [https://fetchplay.netlify.app/](https://fetchplay.netlify.app/) — current Netlify deployment of this project (same static build as `npm run build`).
 - **Static hosting (recommended for this app):** upload **`dist/`** or connect CI to `npm run build` and publish `dist/`.
   - `public/_redirects` and `netlify.toml` / `vercel.json` help with **SPA fallback** (all routes → `index.html`) where supported.
 - **Docker:** a multi-stage `Dockerfile` builds with Node and serves with **nginx**; see the file and `nginx.conf` in the repository root.
 
-There is no mandatory backend; ensure **CORS** on your APIs allows your **deployment origin** if you call third-party HTTP APIs from the browser.
+There is no mandatory backend; ensure **CORS** on your APIs allows your **deployment origin** (e.g. `https://fetchplay.netlify.app`) if you call third-party HTTP APIs from the browser.
 
 ---
 
