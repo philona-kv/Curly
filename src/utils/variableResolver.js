@@ -28,7 +28,7 @@ function getByPath(obj, pathParts) {
 }
 
 /**
- * From "CaseList[0].CaseMainID" or "a.b.0.c" to ["CaseList", 0, "CaseMainID"] / ["a","b",0,"c"].
+ * From e.g. "items[0].id" or "a.b.0.c" to ["items", 0, "id"] / ["a","b",0,"c"].
  */
 export function parsePathSegments(pathString) {
   if (pathString == null || pathString === '') return []

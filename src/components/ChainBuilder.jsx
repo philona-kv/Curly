@@ -243,16 +243,19 @@ export default function ChainBuilder({
                     <p className="text-[11px] text-amber-200/90 leading-snug bg-amber-950/30 border border-amber-900/50 rounded px-2 py-1.5">
                       <span className="font-medium">Chain paths:</span> Use{' '}
                       <code className="text-amber-100/90">{'{{step1.response.body…}}'}</code>{' '}
-                      where the part after that matches <strong>your JSON shape</strong>. If the
-                      API wraps data in a <code className="text-amber-100/90">body</code> object
-                      (e.g. <code className="text-amber-100/90">resp.body.CaseList</code> in
-                      Postman), reference{' '}
+                      so everything after that mirrors <strong>your</strong> JSON. If the
+                      top-level object has a field (e.g.{' '}
+                      <code className="text-amber-100/90">data</code> or{' '}
+                      <code className="text-amber-100/90">result</code>) and you need a
+                      nested list item, you may use two segments with the same label as in the
+                      response, e.g.{' '}
                       <code className="text-amber-100/90">
-                        {'{{step1.response.body.body.CaseList[0].CaseMainID}}'}
-                      </code>{' '}
-                      — first <code className="text-amber-100/90">body</code> is the response
-                      payload, second is the JSON key. For Smartee, copy requests use{' '}
-                      <strong>POST</strong> with a JSON body (not GET).
+                        {'{{step1.response.body.data.items[0].id}}'}
+                      </code>
+                      . First <code className="text-amber-100/90">body</code> is always the
+                      response body in Curly; what follows is your path. If an endpoint needs a
+                      JSON body, use <strong>POST</strong> (or the method the API documents)—do not
+                      rely on <strong>GET</strong> with a body.
                     </p>
                   )}
                 </div>

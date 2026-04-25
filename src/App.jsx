@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Group, Panel, Separator } from 'react-resizable-panels'
-import { Globe, Sparkles, Link2 } from 'lucide-react'
+import { CurlyBraces, Globe, Link2, Sparkles } from 'lucide-react'
 import { Toaster, toast } from 'sonner'
 import Sidebar from './components/Sidebar'
 import RequestBuilder from './components/RequestBuilder'
@@ -171,7 +171,10 @@ function App() {
       <Toaster richColors position="top-right" />
 
       <header className="h-11 shrink-0 border-b border-gray-800 px-3 flex items-center gap-2 bg-[#111827]">
-        <h1 className="text-sm font-semibold mr-2">🛝 API Playground</h1>
+        <div className="flex items-center gap-2 mr-2" aria-label="Curly">
+          <CurlyBraces className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden />
+          <h1 className="text-sm font-semibold tracking-tight">Curly</h1>
+        </div>
         <select
           className="bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs"
           value={env.activeName}
