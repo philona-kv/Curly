@@ -150,7 +150,7 @@ export function parseCollectionImport(text) {
   }
 
   throw new Error(
-    'Collection format not supported. Use a Curly export JSON or Postman Collection v2.1 JSON.',
+    'Collection format not supported. Use a FetchPlay export JSON or Postman Collection v2.1 JSON.',
   )
 }
 

@@ -272,6 +272,6 @@ function normalizeImportChunk(data, index) {
     }
   }
   throw new Error(
-    `Unrecognized environment format in block ${index + 1}. Use Postman export or native Curly JSON.`,
+    `Unrecognized environment format in block ${index + 1}. Use Postman export or native FetchPlay JSON.`,
   )
 }

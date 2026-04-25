@@ -253,7 +253,7 @@ export default function ChainBuilder({
                         {'{{step1.response.body.data.items[0].id}}'}
                       </code>
                       . First <code className="text-amber-100/90">body</code> is always the
-                      response body in Curly; what follows is your path. If an endpoint needs a
+                      response body in FetchPlay; what follows is your path. If an endpoint needs a
                       JSON body, use <strong>POST</strong> (or the method the API documents)—do not
                       rely on <strong>GET</strong> with a body.
                     </p>
